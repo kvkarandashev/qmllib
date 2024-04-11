@@ -20,6 +20,7 @@ from .frepresentations import (
     fgenerate_local_coulomb_matrix,
     fgenerate_unsorted_coulomb_matrix,
 )
+from .periodic_boundary_conditions import extend_for_pbc
 from .slatm import get_boa, get_sbop, get_sbot
 
 
@@ -809,20 +810,9 @@ def generate_fchl_acsf(
     # If periodic boundary conditions are used add neighboring cells that can influence the center cell.
     natoms_tot = natoms
     if cell is not None:
-        nExtend = (np.floor(max(rcut, acut) / np.linalg.norm(cell, 2, axis=0)) + 1).astype(int)
-        true_coords = coordinates
-        for i in range(-nExtend[0], nExtend[0] + 1):
-            for j in range(-nExtend[1], nExtend[1] + 1):
-                for k in range(-nExtend[2], nExtend[2] + 1):
-                    if i == 0 and j == 0 and k == 0:
-                        continue
-                    true_coords = np.append(
-                        true_coords,
-                        coordinates + i * cell[0, :] + j * cell[1, :] + k * cell[2, :],
-                        axis=0,
-                    )
-                    natoms_tot += natoms
-        coordinates = true_coords
+        coordinates, nuclear_charges, natoms_tot = extend_for_pbc(
+            coordinates, nuclear_charges, natoms, max(rcut, acut), cell
+        )
 
     if gradients is False:
 

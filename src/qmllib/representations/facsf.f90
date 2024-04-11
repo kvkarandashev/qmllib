@@ -692,7 +692,7 @@ subroutine fgenerate_fchl_acsf(coordinates, nuclear_charges, elements, &
     !$OMP PARALLEL DO SCHEDULE(dynamic)
     do i = 1, natoms_tot
         do j = 1, nelements
-            if (nuclear_charges(modulo(i-1, natoms)+1) .eq. elements(j)) then
+            if (nuclear_charges(i) .eq. elements(j)) then
                 element_types(i) = j
                 exit
             endif
@@ -943,7 +943,7 @@ subroutine fgenerate_fchl_acsf_and_gradients(coordinates, nuclear_charges, eleme
     !$OMP PARALLEL DO SCHEDULE(dynamic)
     do i = 1, natoms_tot
         do j = 1, nelements
-            if (nuclear_charges(modulo(i-1, natoms)+1) .eq. elements(j)) then
+            if (nuclear_charges(i) .eq. elements(j)) then
                 element_types(i) = j
                 exit
             endif

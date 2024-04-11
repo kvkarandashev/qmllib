@@ -1,5 +1,5 @@
 python=./env/bin/python
-mamba=mamba
+mamba=conda #mamba
 pkg=qmllib
 pip=./env/bin/pip
 pytest=pytest
